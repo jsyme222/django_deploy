@@ -1,0 +1,20 @@
+[Unit] 
+Description=gunicorn daemon
+After=network.target
+
+[Service] 
+User={ user } 
+#  user = jsyme(default: $USER)
+
+Group={ group }
+#  group = www-data(default: www-data)
+ 
+WorkingDirectory={ project_dir } 
+#  project_dir = /home/jsyme/projects/manifesto/app
+
+ExecStart={ path_to_env }bin/gunicorn --access-logfile - --workers 3 --bind unix:{ sock_path } {project_name}.wsgi:application
+#  sock_path = /home/jsyme/projects/manifesto/app/app.sock
+#  project_name = app
+
+[Install]
+WantedBy=multi-user.target

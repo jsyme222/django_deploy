@@ -1,0 +1,29 @@
+#  Nginx sites-available setup for Django
+#  application deploy. Serves static files from
+#  the static 'location' correlating to the
+#  'static_root' variable in Django project
+#  'settings.py' file.
+#
+#  sudo ln -s /etc/nginx/sites-available/{ this_file } /etc/nginx/sites-enabled
+#  sudo nginx -t
+
+server {
+    server_name { domains };
+    #  domains = www.domain.com domain.com
+
+#  Locations--
+    location = /favicon.ico { access_log off; 
+    log_not_found off; 
+	} 
+    location /static/ {
+        root { static_root };
+	#  static_root = /home/jsyme/projects/manifesto/app
+	#  should be the same as 'static_root' in project 'settings.py'
+    }
+    location / { include proxy_params; 
+        proxy_pass  http://unix:{ sock_path };
+	#  sock_path = /home/jsyme/projects/manifesto/app/app.sock
+	#  same path set up in 'gunicorn.service'
+    }
+
+}
