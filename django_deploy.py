@@ -14,7 +14,13 @@ class GunicornSock:
 		print('X_X_X_X_X_X_X_X\n')
 
 		self.template = './file_templates/gunicorn/gunicorn.service'
-		self.user = getpass.getuser()
+
+	def prompt_user(self, prompt, require=True):
+		ask = input(prompt)
+		if require:
+			while ask == '':
+				ask = input(prompt)
+		return ask
 
 	def get_project_info(self):
 		print('\n------------------')
@@ -26,9 +32,11 @@ class GunicornSock:
 			print('\n')
 
 			user_prompt = f"USER to run service under-\nIf left blank will use-> {getpass.getuser()}\nUsername: "
-			username = input(user_prompt)
+			username = self.prompt_user(user_prompt, require=False)
 			if username == '':
 				username = getpass.getuser()
+
+			print(f"User: {username}")
 			return username
 
 		def get_root_dir():
@@ -40,18 +48,29 @@ class GunicornSock:
 				else:
 					return False
 
-			user_prompt = f"DIRECTORY to project root.\nThis should be the same as the \nproject settings 'BASE_DIR\nDirectory: "
-			root_dir = ''
+			user_prompt = "DIRECTORY to project root.\nThis should be the same as the \nproject settings 'BASE_DIR\nDirectory: "
+			root_dir = self.prompt_user(user_prompt)
 
 			while not check_dir(root_dir):
 				if root_dir:
-					print('Directory not valid')
+					print('\nX_X_ERROR_X_X')
+					print(f'Directory \'{root_dir}\' not valid\n')
 				root_dir = input(user_prompt)
 
+			print(f"Project root: {root_dir}")
 			return root_dir
+
+		def get_project_name():
+			print('\n')
+
+			user_prompt = "PORJECT NAME\nName: "
+			project_name = self.prompt_user(user_prompt)
+
+			return project_name
 
 		return {
 			'user': get_user(),
+			'project_name': get_project_name(),
 			'root_dir': get_root_dir(),
 		}
 
