@@ -22,12 +22,38 @@ class GunicornSock:
 		print('Gunicorn service files')
 		print('------------------\n')
 
-		user_prompt = f"User to run service under-\nIf left blank will use-> {getpass.getuser()}\nUsername: "
-		username = input(user_prompt)
-		if username == '':
-			username = getpass.getuser()
+		def get_user():
+			print('\n')
 
-		return username
+			user_prompt = f"USER to run service under-\nIf left blank will use-> {getpass.getuser()}\nUsername: "
+			username = input(user_prompt)
+			if username == '':
+				username = getpass.getuser()
+			return username
+
+		def get_root_dir():
+			print('\n')
+
+			def check_dir(dir):
+				if os.path.isdir(root_dir):
+					return True
+				else:
+					return False
+
+			user_prompt = f"DIRECTORY to project root.\nThis should be the same as the \nproject settings 'BASE_DIR\nDirectory: "
+			root_dir = ''
+
+			while not check_dir(root_dir):
+				if root_dir:
+					print('Directory not valid')
+				root_dir = input(user_prompt)
+
+			return root_dir
+
+		return {
+			'user': get_user(),
+			'root_dir': get_root_dir(),
+		}
 
 	def read_temp(self):
 		with open(self.template, 'rb') as temp:
