@@ -4,12 +4,36 @@
 		"selected_items":
 		[
 			[
-				"prom",
-				"prompt_user\tfunction"
+				"creat",
+				"create_sites_available\tfunction"
+			],
+			[
+				"create",
+				"create_service_file"
+			],
+			[
+				"get",
+				"get_project_info\tfunction"
 			],
 			[
 				"service",
-				"service_file"
+				"service_file\tstatement"
+			],
+			[
+				"sca",
+				"scan_files\tstatement"
+			],
+			[
+				"c",
+				"current_dir\tstatement"
+			],
+			[
+				"root",
+				"root_dir\tstatement"
+			],
+			[
+				"prom",
+				"prompt_user\tfunction"
 			],
 			[
 				"servie",
@@ -18,10 +42,6 @@
 			[
 				"sock",
 				"sock_path\tstatement"
-			],
-			[
-				"root",
-				"root_dir\tstatement"
 			],
 			[
 				"prj",
@@ -50,10 +70,6 @@
 			[
 				"promt",
 				"prompt_user"
-			],
-			[
-				"get",
-				"getuser\tfunction"
 			],
 			[
 				"Guin",
@@ -91,17 +107,35 @@
 			"file": "django_deploy.py",
 			"settings":
 			{
-				"buffer_size": 4483,
+				"buffer_size": 839,
 				"encoding": "UTF-8",
 				"line_ending": "Unix",
 				"name": "#!/user/bin python3"
 			}
 		},
 		{
-			"file": "file_templates/gunicorn/gunicorn.service",
+			"file": "settings.py",
 			"settings":
 			{
-				"buffer_size": 503,
+				"buffer_size": 251,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "main/GunicornSock.py",
+			"settings":
+			{
+				"buffer_size": 5029,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "main/NginxVirtualBox.py",
+			"settings":
+			{
+				"buffer_size": 1289,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -110,7 +144,16 @@
 			"file": "tests.py",
 			"settings":
 			{
-				"buffer_size": 1002,
+				"buffer_size": 798,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "main/file_templates/nginx/sites-available/*template*",
+			"settings":
+			{
+				"buffer_size": 847,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -200,13 +243,16 @@
 	},
 	"expanded_folders":
 	[
-		"/home/jsyme/server_setup_files/django_deploy",
-		"/home/jsyme/server_setup_files/django_deploy/__pycache__",
-		"/home/jsyme/server_setup_files/django_deploy/file_templates",
-		"/home/jsyme/server_setup_files/django_deploy/file_templates/gunicorn"
+		"/home/jsyme/projects/django_deploy",
+		"/home/jsyme/projects/django_deploy/main",
+		"/home/jsyme/projects/django_deploy/main/file_templates",
+		"/home/jsyme/projects/django_deploy/main/file_templates/nginx",
+		"/home/jsyme/projects/django_deploy/main/file_templates/nginx/sites-available"
 	],
 	"file_history":
 	[
+		"/home/jsyme/projects/django_deploy/main/file_templates/gunicorn/gunicorn.service",
+		"/home/jsyme/projects/django_deploy/main/GunicornSock.py",
 		"/home/jsyme/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
 		"/home/jsyme/projects/manifesto/app/app/urls.py",
 		"/home/jsyme/projects/manifesto/manifesto.sublime-project",
@@ -257,7 +303,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -266,15 +312,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4483,
+						"buffer_size": 839,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4445,
-								4445
+								801,
+								801
 							]
 						],
 						"settings":
@@ -285,16 +331,116 @@
 							"SL.37.region_keys":
 							[
 							],
+							"SL.40.region_keys":
+							[
+							],
 							"auto_name": "#!/user/bin python3",
+							"git_gutter_is_enabled": true,
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Djaneiro/Syntaxes/Python Django.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "settings.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 251,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								60,
+								60
+							]
+						],
+						"settings":
+						{
 							"git_gutter_is_enabled": true,
 							"incomplete_sync": null,
 							"syntax": "Packages/Djaneiro/Syntaxes/Python Django.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2380.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "main/GunicornSock.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5029,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5011,
+								5011
+							]
+						],
+						"settings":
+						{
+							"SL.47.region_keys":
+							[
+							],
+							"git_gutter_is_enabled": true,
+							"incomplete_sync": null,
+							"spell_check": true,
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2497.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "main/NginxVirtualBox.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1289,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								414,
+								414
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": true,
+							"incomplete_sync": null,
+							"syntax": "Packages/Djaneiro/Syntaxes/Python Django.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 153.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -304,52 +450,20 @@
 			"sheets":
 			[
 				{
-					"buffer": 1,
-					"file": "file_templates/gunicorn/gunicorn.service",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 503,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								503,
-								503
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
+					"buffer": 4,
 					"file": "tests.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1002,
+						"buffer_size": 798,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								814,
-								814
+								543,
+								543
 							]
 						],
 						"settings":
@@ -362,13 +476,50 @@
 							],
 							"git_gutter_is_enabled": true,
 							"incomplete_sync": null,
-							"syntax": "Packages/Djaneiro/Syntaxes/Python Django.tmLanguage"
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Djaneiro/Syntaxes/Python Django.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "main/file_templates/nginx/sites-available/*template*",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 847,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								520,
+								520
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": true,
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -402,7 +553,7 @@
 		"cols":
 		[
 			0.0,
-			0.571935508207,
+			0.61809723389,
 			1.0
 		],
 		"rows":
