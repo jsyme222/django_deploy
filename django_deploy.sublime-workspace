@@ -1,0 +1,482 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"prom",
+				"prompt_user\tfunction"
+			],
+			[
+				"service",
+				"service_file"
+			],
+			[
+				"servie",
+				"service_file\tstatement"
+			],
+			[
+				"sock",
+				"sock_path\tstatement"
+			],
+			[
+				"root",
+				"root_dir\tstatement"
+			],
+			[
+				"prj",
+				"project_name\tstatement"
+			],
+			[
+				"pr",
+				"prompt_user\tfunction"
+			],
+			[
+				"projec",
+				"project_name"
+			],
+			[
+				"Guni",
+				"GunicornSock"
+			],
+			[
+				"proje",
+				"project_name\tstatement"
+			],
+			[
+				"user",
+				"prompt_user"
+			],
+			[
+				"promt",
+				"prompt_user"
+			],
+			[
+				"get",
+				"getuser\tfunction"
+			],
+			[
+				"Guin",
+				"GunicornSock\tmodule"
+			],
+			[
+				"Gui",
+				"GunicornSock\tmodule"
+			],
+			[
+				"Gunicorn",
+				"GunicornSock\tclass"
+			],
+			[
+				"Top",
+				"TopicSerializer\tclass"
+			],
+			[
+				"serializ",
+				"serializer_class"
+			],
+			[
+				"seri",
+				"serializer_class"
+			],
+			[
+				"setup",
+				"setupTopics\tfunction"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "django_deploy.py",
+			"settings":
+			{
+				"buffer_size": 4483,
+				"encoding": "UTF-8",
+				"line_ending": "Unix",
+				"name": "#!/user/bin python3"
+			}
+		},
+		{
+			"file": "file_templates/gunicorn/gunicorn.service",
+			"settings":
+			{
+				"buffer_size": 503,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tests.py",
+			"settings":
+			{
+				"buffer_size": 1002,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Anaconda Python Builder",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Anaconda Python Builder",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Anaconda Python Builder",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: inst",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/jsyme/server_setup_files/django_deploy",
+		"/home/jsyme/server_setup_files/django_deploy/__pycache__",
+		"/home/jsyme/server_setup_files/django_deploy/file_templates",
+		"/home/jsyme/server_setup_files/django_deploy/file_templates/gunicorn"
+	],
+	"file_history":
+	[
+		"/home/jsyme/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
+		"/home/jsyme/projects/manifesto/app/app/urls.py",
+		"/home/jsyme/projects/manifesto/manifesto.sublime-project",
+		"/home/jsyme/projects/manifesto/app/app/local_settings.py",
+		"/home/jsyme/.config/sublime-text-3/Packages/Anaconda/Anaconda.sublime-settings",
+		"/home/jsyme/projects/manifesto/app/sftp-config.json",
+		"/home/jsyme/.config/sublime-text-3/Packages/User/SFTP.sublime-settings",
+		"/home/jsyme/test.py",
+		"/home/jsyme/projects/dumped/dumped.sublime-project",
+		"/home/jsyme/projects/dumped/app/main/models.py",
+		"/home/jsyme/projects/dumped/app/sftp-config.json",
+		"/home/jsyme/.config/sublime-text-3/Packages/User/sftp-config.json",
+		"/home/jsyme/.config/sublime-text-3/Packages/Git/Git.sublime-settings",
+		"/home/jsyme/.config/sublime-text-3/Packages/FTPSync/FTPSync.sublime-settings",
+		"/home/jsyme/.config/sublime-text-3/Packages/User/FTPSync.sublime-settings",
+		"/home/jsyme/projects/dumped/app/ftpsync.settings"
+	],
+	"find":
+	{
+		"height": 0.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "django_deploy.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4483,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4445,
+								4445
+							]
+						],
+						"settings":
+						{
+							"SL.14.region_keys":
+							[
+							],
+							"SL.37.region_keys":
+							[
+							],
+							"auto_name": "#!/user/bin python3",
+							"git_gutter_is_enabled": true,
+							"incomplete_sync": null,
+							"syntax": "Packages/Djaneiro/Syntaxes/Python Django.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2380.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 1,
+					"file": "file_templates/gunicorn/gunicorn.service",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 503,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								503,
+								503
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": true,
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "tests.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1002,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								814,
+								814
+							]
+						],
+						"settings":
+						{
+							"SL.16.region_keys":
+							[
+							],
+							"SL.44.region_keys":
+							[
+							],
+							"git_gutter_is_enabled": true,
+							"incomplete_sync": null,
+							"syntax": "Packages/Djaneiro/Syntaxes/Python Django.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 34.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.571935508207,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 0.0
+	},
+	"output.exec":
+	{
+		"height": 118.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.mdpopups":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 118.0
+	},
+	"pinned_build_system": "",
+	"project": "django_deploy.sublime-project",
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 202.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
