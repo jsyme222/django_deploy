@@ -1,11 +1,6 @@
 #!/user/bin python3.7
 import os
-
-
-def center(text, width=80, delim="-", end="\n"):  # Center multiple line 'text' with 'delim' padding
-	lines = text.split('\n')
-	for line in lines:
-		print(line.center(width, delim) + end)
+import settings
 
 
 def prompt_user(prompt, require=False):  # Prompt user and loop if required input
@@ -38,7 +33,7 @@ class GunicornSock:
 			if username == '':
 				username = os.getlogin()
 
-			center(f"\nUSER\n{username}", width=40, delim=" ", end="")
+			settings.center(f"\nUSER\n{username}", width=40, delim=" ", end="")
 			return username
 
 		def get_root_dir():
@@ -53,11 +48,11 @@ class GunicornSock:
 			while not os.path.isdir(root_dir):
 				if root_dir:
 					print('\n')
-					center(' ERROR ', width=40, delim="x")
-					center(f'Directory \'{root_dir}\' not valid', width=40)
+					settings.center(' ERROR ', width=40, delim="x")
+					settings.center(f'Directory \'{root_dir}\' not valid', width=40)
 				root_dir = input(user_prompt)
 
-			center(f"\nBASE DIRECTORY\n{root_dir}", width=40, delim=" ", end="")
+			settings.center(f"\nBASE DIRECTORY\n{root_dir}", width=40, delim=" ", end="")
 			return root_dir
 
 		def get_project_name():
@@ -66,7 +61,7 @@ class GunicornSock:
 			user_prompt = "Project Name\n[Project] : "
 			project_name = prompt_user(user_prompt, require=True)
 
-			center(f'\nPROJECT\n{project_name}', width=40, delim=" ", end="")
+			settings.center(f'\nPROJECT\n{project_name}', width=40, delim=" ", end="")
 			return project_name
 
 		def get_group():
@@ -77,7 +72,7 @@ class GunicornSock:
 			if group == '':
 				group = 'www-data'
 
-			center(f'\nGROUP\n{group}', width=40, delim=" ", end="")
+			settings.center(f'\nGROUP\n{group}', width=40, delim=" ", end="")
 			return group
 
 		def get_sock_path(root, name):
@@ -86,7 +81,7 @@ class GunicornSock:
 			root += str(name) + '.sock'
 
 			print('\n')
-			center(f'Creating sock path at\n{root}', delim="*")
+			settings.center(f'Creating sock path at\n{root}', delim=" ")
 
 			return root
 
@@ -110,11 +105,11 @@ class GunicornSock:
 				checked = list(checked)
 				if not all(checked):
 					print('\n')
-					center(f' ERROR ', delim="x")
+					settings.center(f' ERROR ', delim="x")
 					if not checked[0]:
-						center(f' Environment not located at \n {bin_dir} ')
+						settings.center(f' Environment not located at \n {bin_dir} ')
 					else:
-						center(f' Gunicorn not installed at \n {path} \n Install now? (Y/n) ')
+						settings.center(f' Gunicorn not installed at \n {path} \n Install now? (Y/n) ')
 						input('Install Gunicorn?')
 					return exit()
 				else:
@@ -122,7 +117,7 @@ class GunicornSock:
 
 			if not check_env_dir(path):
 				exit()
-			center(f'\nENV PATH\n{path}', width=40, delim=" ", end="")
+			settings.center(f'\nENV PATH\n{path}', width=40, delim=" ", end="")
 			return path
 
 		payload['user'] = get_user()
@@ -148,8 +143,8 @@ class GunicornSock:
 			template = f'{real_path}/file_templates/gunicorn/gunicorn.service'
 			if not os.path.isfile(template):
 					print('\n')
-					center(' ERROR ', width=40, delim="x")
-					center(f' Template not found\n\'{template}\' ', width=40)
+					settings.center(' ERROR ', width=40, delim="x")
+					settings.center(f' Template not found\n\'{template}\' ', width=40)
 					exit()
 			else:
 				with open(template, 'r') as temp:
@@ -161,12 +156,12 @@ class GunicornSock:
 				file = file.replace('{ ' + key + ' }', project_info[key])
 
 			# with open('/etc/systemd/system/gunicorn.service', 'w+') as f:
-			# 	center('\n Creating gunicorn.service \n', end="")
+			# 	settings.center('\n Creating gunicorn.service \n', end="")
 			# 	f.write(file)
 
 		if os.path.exists('/etc/systemd/system/gunicorn.service'):
 			print('\n')
-			center(' ERROR \n Gunicorn File already found ', delim="x")
+			settings.center(' ERROR \n Gunicorn File already found ', delim="x")
 			print('\n')
 			exit()
 		else:
@@ -178,12 +173,12 @@ class GunicornSock:
 	def run(self):
 		intro = 'Gunicorn Service Setup'
 		print('\n')
-		center(intro, end="\n")
+		settings.center(intro, end="\n")
 
 		running = self.create_service_file()
 		if not running:
-			center(f' ERROR \nSomething went wrong', delim="x")
+			settings.center(f' ERROR \nSomething went wrong', delim="x")
 			exit()
 		else:
-			center('Gunicorn setup\nCOMPLETE', delim=" ")
+			settings.center('Gunicorn setup\nCOMPLETE', delim=" ")
 		return running

@@ -1,7 +1,17 @@
 #!/user/bin python3.7
 import os
 
+
 current_dir = os.getcwd()
+
+
+def center(text, width=80, delim="-", end="\n"):
+	"""
+	Center multiple line 'text' with 'delim' padding
+	"""
+	lines = text.split('\n')
+	for line in lines:
+		print(line.center(width, delim) + end)
 
 
 def check_django_dir():
