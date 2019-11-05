@@ -4,24 +4,24 @@
 #  'static_root' variable in Django project
 #  'settings.py' file.
 #
-#  sudo ln -s /etc/nginx/sites-available/{ this_file } /etc/nginx/sites-enabled
-#  sudo nginx -t
+#  $ sudo ln -s /etc/nginx/sites-available/{$ project_name, True, None } /etc/nginx/sites-enabled
+#  $ sudo nginx -t
 
 server {
-    server_name { domains };
+    server_name {$ domains, True, None };
     #  domains = www.domain.com domain.com
 
 #  Locations--
-    location = /favicon.ico { access_log off; 
+    location = /favicon.ico { access_log off;
     log_not_found off; 
 	} 
     location /static/ {
-        root { root_dir };
+        root {$ root_dir, False, $PWD };
 	#  static_root = /home/jsyme/projects/manifesto/app
 	#  should be the same as 'static_root' in project 'settings.py'
     }
     location / { include proxy_params; 
-        proxy_pass  http://unix:{ sock_path };
+        proxy_pass  http://unix:{$ sock_path, False, root_dir+project_name.sock };
 	#  sock_path = /home/jsyme/projects/manifesto/app/app.sock
 	#  same path set up in 'gunicorn.service'
     }

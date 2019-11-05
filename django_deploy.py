@@ -24,16 +24,14 @@ def main():
 		if choice not in 'Yy':
 			exit()
 
-	info = comp.Collect.inputs(
-		[
-			('user', False, os.getlogin()),
-			('group', False, 'www-data'),
-			('root_dir', False, ROOT_DIR),
-			('project_name', True, None),
-			('domains', True, None),
-			('path_to_env', False, comp.default_env_dir(ROOT_DIR)),
-		]
-	)
+	user = ('user', False, os.getlogin())
+	group = ('group', False, 'www-data')
+	root_dir = ('root_dir', False, ROOT_DIR)
+	project_name = ('project_name', True, None)
+	domains = ('domains', True, None)
+	path_to_env = ('path_to_env', False, comp.default_env_dir(ROOT_DIR))
+
+	info = comp.Collect.inputs()
 	g = sock.GunicornSock()
 	sock_complete = g.run(info)
 
