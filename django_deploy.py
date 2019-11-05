@@ -1,23 +1,41 @@
 #!/user/bin python3.7
-import settings
+import os
 from main import GunicornSock as sock
 from main import NginxVirtualBox as nginx
+from main import components as comp
 
 
 def main():
 
-	welcome = """Django Deploy\nThis tool is meant to ease the deployment of Django projects\nutilizing the lightweight power of Nginx web server and\nWSGI application service by Gunicorn"""
-	settings.center('\n', delim="*", end="")  # Text decoration function
-	settings.center(welcome, delim=" ")
-	settings.center('\n', delim="*", end="")
+	ROOT_DIR = os.getcwd()
 
-	if not settings.check_django_dir():
-		settings.center(f'The current directory\n{settings.current_dir}\nDoes not contain a \'manage.py\' file.\nContinue?\n ', delim=" ", end="")
+	welcome = """Django Deploy\nThis tool is meant to ease the deployment of Django projects\nutilizing the lightweight power of Nginx web server and\nWSGI application service by Gunicorn"""
+	comp.center('\n', delim="*", end="")  # Text decoration function
+	comp.center(welcome, delim=" ")
+	comp.center('\n', delim="*", end="")
+
+	if not nginx.comp.check_django_dir(ROOT_DIR):  # Check for 'manage.py' in cwd
+		comp.center(
+			f'The current directory\n{ROOT_DIR}\nDoes not contain a \'manage.py\' file.\nContinue?\n ',
+			delim=" ",
+			end="",
+		)
 		choice = input('[Y/n]')
 		if choice not in 'Yy':
 			exit()
+
+	info = comp.Collect.inputs(
+		[
+			('user', False, os.getlogin()),
+			('group', False, 'www-data'),
+			('root_dir', False, ROOT_DIR),
+			('project_name', True, None),
+			('domains', True, None),
+			('path_to_env', False, comp.default_env_dir(ROOT_DIR)),
+		]
+	)
 	g = sock.GunicornSock()
-	sock_complete = g.run()
+	sock_complete = g.run(info)
 
 	if sock_complete:
 		n = nginx.NginxVirtualBox(sock_complete)
