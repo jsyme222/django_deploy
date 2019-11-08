@@ -21,8 +21,8 @@ def check_django_dir(directory):
 	"""
 	Checks for a 'manage.py' file to verify base directory
 	of a django project
-	:param directory: {str}
-	:return django_dir: {bool}
+	:param directory: str()
+	:return django_dir: bool()
 	"""
 	scan_files = os.scandir(directory)
 	files = [x.name for x in scan_files]
@@ -37,8 +37,8 @@ def default_env_dir(root):
 	"""
 	Builds a default directory for the virtual
 	environment based off of the 'root' base_dir
-	:param root: {str}
-	:return env: {str}
+	:param root: str()
+	:return env: str()
 	"""
 	temp = root.split('/')
 	env = '/'.join(temp[:-1])
@@ -47,46 +47,97 @@ def default_env_dir(root):
 	return env
 
 
-class Collect:
+class Collector:
 
-	def inputs(formatted_file):
-		"""
-		Takes in a file pre-formatted with { variable } placement.
-		Returns a payload dict() using 'variable': response formatting.
-		:param formatted_file: {str: directory}
-		:return payload: {dict}
-		"""
+	def __init__(self, file):
+		self.errors = {}
 
-		payload = {}
-		errors = {}
+		if not os.path.isfile(file):
+			self.errors['file_error'] = f'Template not found at {file}'
+		else:
+			self.file_path = file
+			with open(file, 'r') as f:
+				self.file = f.read()
 
-		def send_payload():
-			if not errors:
-				return payload
-			else:
-				return errors
-
-		if not os.path.isfile(formatted_file):
-			errors['file_error'] = f'Template not found at {formatted_file}'
-			send_payload()
-
-		with open(formatted_file, 'r') as f:
-			opened_file = f.read()
-
+	def pull_vars(self):
+		payload = []
 		var_pattern = re.compile('(\\{[\$].*?\\})', re.IGNORECASE | re.DOTALL)
-		variables = var_pattern.findall(opened_file)
+		variables = var_pattern.findall(self.file)
+
+		if len(variables) <= 1:
+			self.errors['File Format'] = 'File not formatted'
 
 		for var in variables:
 			case = var[3:-2]
 			case = tuple(case.split(', '))
-			prompt, required, default = case[0], bool(case[1]), case[2]
-			user_input = input(prompt)
-			if required:
-				while user_input == '':
-					user_input = input(f'{prompt}\n[{default}] : ')
-			elif not required and user_input == '':
-				user_input = default
-			payload[prompt] = user_input
+			prompt, required, default = case[0], case[1], case[2]
+			payload.append((prompt, required, default))
 
-		print(payload)
 		return payload
+
+	def inputs(self, output=True):
+		"""
+		Takes in a file pre-formatted with {$ variable, required, default_value }
+		symbols. Returns a payload dict() using {'variable': response} formatting.
+		dict(added_functions) includes {SYSTEM_CALL : function} to aquire default value.
+		:param added_functions: dict(optional)
+		:return payload: dict()
+		"""
+
+		def send_payload(payload):
+			if not self.errors:
+				return payload
+			else:
+				return self.errors
+
+		def read_from_file(added_functions={}):
+			payload = {}
+
+			SYSTEM_CALLS = {
+				'$USER': os.getlogin(),
+				'$PWD': os.getcwd(),
+				'$ENV_DIR': default_env_dir(os.getcwd()),
+				'$SOCK_DIR': os.getcwd() + '/' + os.getcwd().split('/')[-1] + '.sock',
+				'$PROJECT_NAME': os.getcwd().split('/')[-1],
+			}
+
+			if len(added_functions.keys()) >= 1:
+				SYSTEM_CALLS.update(added_functions)
+
+			for case in self.pull_vars():
+				prompt, required, default = case[0], case[1], case[2]
+				if default.startswith('$'):
+					default = SYSTEM_CALLS[default]
+
+				if prompt not in payload.keys():
+					if required != 'True':
+						user_input = input(f'{prompt}\n[{default}] : ')
+						if user_input == '':
+							user_input = default
+					else:
+						user_input = input(f'{prompt} : ')
+						while user_input == '':
+							user_input = input(f'{prompt} : ')
+
+					payload[prompt] = user_input
+
+			return payload
+
+		if len(self.errors.keys()) == 0:
+			reading = read_from_file()
+			if reading and output:
+				self.outputs(reading, self.file_path)
+
+
+	def outputs(self, data, file):
+		"""
+		Takes data as dict() and writes to file based upon
+		which template is passed.
+		:param data: dict()
+		:return:
+		"""
+
+		filename = file.split('/')[-1]
+		write_file = f'./new_{filename}'
+		print(data)
+		print(write_file)

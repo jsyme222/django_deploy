@@ -9,10 +9,10 @@ User={$ user, False, $USER }
 Group={$ group, False, www-data }
 #  group = www-data(default: www-data)
  
-WorkingDirectory={$ root_dir, False, $PWD}
+WorkingDirectory={$ root_dir, False, $PWD }
 #  root_dir = /home/$USER/projects/project_name/app
 
-ExecStart={$ path_to_env, False, root_dir+../ }bin/gunicorn --access-logfile - --workers 3 --bind unix:{$ sock_path, False, root_dir+project_name.sock } {$ project_name, True, None }.wsgi:application
+ExecStart={$ path_to_env, False, $ENV_DIR }bin/gunicorn --access-logfile - --workers 3 --bind unix:{$ sock_path, False, $SOCK_DIR } {$ project_name, False, $PROJECT_NAME }.wsgi:application
 #  sock_path = /home/jsyme/projects/project_name/app/app.sock
 #  project_name = app
 
