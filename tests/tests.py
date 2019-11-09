@@ -1,4 +1,4 @@
-#!/user/bin python3.7
+#!/usr/bin python3.7
 import os
 from unittest import TestCase, main
 from components.components import Collector
