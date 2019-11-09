@@ -8,8 +8,9 @@
 #  $ sudo nginx -t
 
 server {
-    listen {$ port, False, 80 }
-    listen [::]:{$ port, False, 80 }
+
+    listen {$ port, False, 80 };
+    listen [::]:{$ port, False, 80 };
     server_name {$ domains, True, None };
     #  domains = www.domain.com domain.com
 

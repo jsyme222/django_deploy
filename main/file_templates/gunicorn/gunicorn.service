@@ -1,4 +1,4 @@
-[Unit] 
+[Unit]
 Description=gunicorn daemon
 After=network.target
 
