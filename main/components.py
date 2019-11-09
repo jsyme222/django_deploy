@@ -26,10 +26,8 @@ def check_django_dir(directory):
 	:param directory: str()
 	:return django_dir: bool()
 	"""
-    scan_files = os.scandir(directory)
-    files = [x.name for x in scan_files]
-    django_dir = True
-    if 'manage.py' not in files:
+
+    if 'manage.py' not in os.listdir(directory):
         django_dir = False
 
     return django_dir
@@ -52,12 +50,17 @@ def default_env_dir(root):
 
 
 class Collector:  # TODO Get actual file path and file name
-
+    """
+    The Collector class is designed to take in any file and format
+    the file with the appropriate values as defined within the symbols
+    found in the formatted file.  # TODO will change as features accumulate
+    """
     def __init__(self, file):
         self.errors = {}
 
         if not os.path.isfile(file):
             self.errors['file_error'] = f'Template not found at {file}'
+            self.read_err()
         else:
             self.file_path = file
             with open(file, 'r') as f:
@@ -152,7 +155,7 @@ class Collector:  # TODO Get actual file path and file name
 		which template is passed as self.file_path.
 
 		:param data: dict()
-		:return:
+		:return complete: bool()
 		"""
 
         filename = self.file_path.split('/')[-1]
@@ -161,10 +164,7 @@ class Collector:  # TODO Get actual file path and file name
         to_replace = self.pull_vars(raw=True)
         ready = dict(zip(to_replace, collected))
 
-        if os.path.isfile(write_to):
-            self.errors['File Exists'] = f'File {filename} already found at {write_to}'
-            complete = False
-        else:
+        def write_to_file():
             with open(write_to, 'w+') as f:
                 file = self.file
                 for k in ready.keys():
@@ -174,10 +174,16 @@ class Collector:  # TODO Get actual file path and file name
 
             if os.path.isfile(write_to):
                 print(f'File - {write_to} created')
-                complete = True
+                return True
             else:
                 self.errors['File Write'] = 'Error while writing file'
                 self.read_err()
-                complete = False
+                return False
+
+        if os.path.isfile(write_to):
+            self.errors['File Exists'] = f'File {filename} already found at {write_to}'
+            complete = False
+        else:
+            return write_to_file()  # Write new file
 
         return complete
