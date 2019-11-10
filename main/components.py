@@ -1,4 +1,4 @@
-#!/user/bin python3.7
+#!/usr/bin python3.7
 import os
 import re
 
@@ -13,6 +13,7 @@ def center(text, width=80, delim="-", end="\n"):
 	:param end: {str}
 	:return:
 	"""
+
     lines = text.split('\n')
     for line in lines:
         print(line.center(width, delim) + end)
@@ -55,16 +56,22 @@ class Collector:  # TODO Get actual file path and file name
     the file with the appropriate values as defined within the symbols
     found in the formatted file.  # TODO will change as features accumulate
     """
+
     def __init__(self, file):
         self.errors = {}
 
-        if not os.path.isfile(file):
-            self.errors['file_error'] = f'Template not found at {file}'
-            self.read_err()
-        else:
+        if self.check_file(file):
             self.file_path = file
             with open(file, 'r') as f:
                 self.file = f.read()
+
+    def check_file(self, file):
+        if not os.path.isfile(file):
+            self.errors['File Invalid'] = f'File not found at {file}'
+            self.read_err()
+            return False
+        else:
+            return True
 
     def read_err(self):  # Reads errors
         for error in self.errors:
@@ -78,6 +85,8 @@ class Collector:  # TODO Get actual file path and file name
 
         if len(variables) < 1:
             self.errors['File Format'] = 'File not formatted'
+            self.read_err()
+            return False
 
         for var in variables:
             if var not in raw_vars:
@@ -108,14 +117,11 @@ class Collector:  # TODO Get actual file path and file name
             '$PWD': os.getcwd(),
             '$ENV_DIR': default_env_dir(os.getcwd()),
             '$SOCK_DIR': os.getcwd() + '/' + os.getcwd().split('/')[-1] + '.sock',
-            '$PROJECT_NAME': os.getcwd().split   ('/')[-1],
+            '$PROJECT_NAME': os.getcwd().split('/')[-1],
         }
 
         def read_from_file(added_functions={}):  # TODO docstring
             payload = {}
-
-            if not os.path.isfile(self.file_path):
-                self.errors['No File'] = 'File is not at location'
 
             if len(added_functions.keys()) >= 1:
                 SYSTEM_CALLS.update(added_functions)
@@ -139,15 +145,15 @@ class Collector:  # TODO Get actual file path and file name
 
             return payload
 
-        if len(self.errors.keys()) == 0:
+        if len(self.errors.keys()) != 0:
+            self.read_err()
+            return False
+        else:
             reading = read_from_file()
             if reading and output_file:
                 self.outputs(reading)
             elif reading and not output_file:
                 return reading
-            else:
-                self.errors['File Read'] = 'Error while reading inputs from file'
-                self.read_err()
 
     def outputs(self, data):  # TODO docstring
         """

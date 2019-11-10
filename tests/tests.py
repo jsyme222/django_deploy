@@ -25,6 +25,9 @@ class TestCollector(TestCase):
 		nginx_file = './file_templates/template-sites-available'  # Nginx test files
 		self.nginx_collector = Collector(nginx_file)
 
+		false_file = '/file/that/does/not/exist'
+		self.false_collector = Collector(false_file)
+
 	def test_pull_vars(self):
 		"""
 		Tests the values returned from the pull_vars() method
@@ -51,7 +54,7 @@ class TestCollector(TestCase):
 			'{$ project_name, False, $PROJECT_NAME }'
 		]
 
-		self.assertEqual(nginx_vars, nginxFalse_vars_constant)
+		self.assertEqual(nginx_vars, nginx_vars_constant)
 		self.assertEqual(gunicorn_vars, gunicorn_vars_constant)
 
 	def test_outputs(self):
@@ -76,8 +79,18 @@ class TestCollector(TestCase):
 		g = self.gunicorn_collector.outputs(gunicorn_inputs_constants)
 		n = self.nginx_collector.outputs(nginx_inputs_constants)
 
-		self.assertEqual(g, False)
-		self.assertEqual(n, False)
+		self.assertEqual(g, True)
+		self.assertEqual(n, True)
+
+		g_file = './new_template-gunicorn.service'
+		n_file = './new_template-sites-available'
+
+		while os.path.isfile(g_file) or os.path.isfile(n_file):
+			os.remove(g_file)
+			os.remove(n_file)
+
+		self.assertFalse(os.path.isfile(g_file), True)
+		self.assertFalse(os.path.isfile(n_file), True)
 
 
 if __name__ == '__main__':
