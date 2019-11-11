@@ -5,7 +5,7 @@ import re
 
 def center(text, width=80, delim="-", end="\n"):
     """
-	Text align and decoration for terminal display
+	Text align and decoration for terminal display.
 
 	:param text: {str}
 	:param width: {int}
@@ -28,6 +28,7 @@ def check_django_dir(directory):
 	:return django_dir: bool()
 	"""
 
+    django_dir = True
     if 'manage.py' not in os.listdir(directory):
         django_dir = False
 
@@ -60,18 +61,13 @@ class Collector:  # TODO Get actual file path and file name
     def __init__(self, file):
         self.errors = {}
 
-        if self.check_file(file):
+        try:
             self.file_path = file
             with open(file, 'r') as f:
                 self.file = f.read()
-
-    def check_file(self, file):
-        if not os.path.isfile(file):
-            self.errors['File Invalid'] = f'File not found at {file}'
+        except FileNotFoundError:
+            self.errors['File Error'] = f'File not found at {self.file_path}'
             self.read_err()
-            return False
-        else:
-            return True
 
     def read_err(self):  # Reads errors
         for error in self.errors:
@@ -84,9 +80,8 @@ class Collector:  # TODO Get actual file path and file name
         variables = var_pattern.findall(self.file)
 
         if len(variables) < 1:
-            self.errors['File Format'] = 'File not formatted'
-            self.read_err()
-            return False
+            #  TODO create file_format() function
+            raise TypeError('File not formatted')
 
         for var in variables:
             if var not in raw_vars:
@@ -124,26 +119,32 @@ class Collector:  # TODO Get actual file path and file name
             payload = {}
 
             if len(added_functions.keys()) >= 1:
-                SYSTEM_CALLS.update(added_functions)
+                SYSTEM_CALLS.update(added_functions)  # update SYSTEM_CALLS with functions passed in
 
-            for case in self.pull_vars():
-                prompt, required, default = case[0], case[1], case[2]
-                if default.startswith('$'):
-                    default = SYSTEM_CALLS[default]
+            try:
+                for case in self.pull_vars():
+                    prompt, required, default = case[0], case[1], case[2]
+                    if default.startswith('$'):
+                        default = SYSTEM_CALLS[default]
 
-                if prompt not in payload.keys():
-                    if required != 'True':
-                        user_input = input(f'{prompt}\n[{default}] : ')
-                        if user_input == '':
-                            user_input = default
-                    else:
-                        user_input = input(f'{prompt} : ')
-                        while user_input == '':
+                    if prompt not in payload.keys():
+                        if required != 'True':
+                            user_input = input(f'{prompt}\n[{default}] : ')
+                            if user_input == '':
+                                user_input = default
+                        else:
                             user_input = input(f'{prompt} : ')
+                            while user_input == '':
+                                user_input = input(f'{prompt} : ')
 
-                    payload[prompt] = user_input
+                        payload[prompt] = user_input
 
-            return payload
+                return payload
+
+            except TypeError:
+                self.errors['File Error'] = 'File not formatted'
+                self.read_err()
+                return False
 
         if len(self.errors.keys()) != 0:
             self.read_err()
@@ -155,41 +156,46 @@ class Collector:  # TODO Get actual file path and file name
             elif reading and not output_file:
                 return reading
 
-    def outputs(self, data):  # TODO docstring
+    def outputs(self, data, write_to='./new-{}'):  # TODO docstring
         """
 		Takes data as dict() and writes to file based upon
 		which template is passed as self.file_path.
 
 		:param data: dict()
+		:param write_to: str()
 		:return complete: bool()
 		"""
 
+        if type(data) != dict:
+            self.errors['Data Error'] = 'Data to write must be dictionary'
+            raise TypeError('Data must be type dictionary')
+
         filename = self.file_path.split('/')[-1]
-        write_to = f'./new_{filename}'
+        if write_to == './new-{}':
+            write_to = write_to.format(filename)
+
         collected = [x for x in data.values()]
         to_replace = self.pull_vars(raw=True)
-        ready = dict(zip(to_replace, collected))
+        ready = dict(zip(to_replace, collected))  # dict of values ready to write
 
         def write_to_file():
-            with open(write_to, 'w+') as f:
-                file = self.file
-                for k in ready.keys():
-                    file = file.replace(k, ready[k])  # Replaces all symbols in file with values
-
-                f.write(file)
-
             if os.path.isfile(write_to):
+                raise FileExistsError('File already Exists')
+            else:
+                with open(write_to, 'w+') as f:
+                    file = self.file
+                    for k in ready.keys():
+                        file = file.replace(k, ready[k])  # Replaces all symbols in file with values
+
+                    f.write(file)
+
                 print(f'File - {write_to} created')
                 return True
-            else:
-                self.errors['File Write'] = 'Error while writing file'
-                self.read_err()
-                return False
 
-        if os.path.isfile(write_to):
-            self.errors['File Exists'] = f'File {filename} already found at {write_to}'
-            complete = False
-        else:
+        try:
             return write_to_file()  # Write new file
 
-        return complete
+        except FileExistsError:
+            self.errors['File Error'] = f'File {filename} already exists at {write_to}'
+            self.read_err()
+            return False

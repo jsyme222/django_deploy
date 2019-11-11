@@ -1,7 +1,7 @@
 #!/usr/bin python3.7
 import os
 from unittest import TestCase, main
-from components.components import Collector
+from components import Collector
 
 
 class TestCollector(TestCase):
@@ -27,6 +27,9 @@ class TestCollector(TestCase):
 
 		false_file = '/file/that/does/not/exist'
 		self.false_collector = Collector(false_file)
+
+		no_format = './file_templates/no-format.txt'
+		self.no_format = Collector(no_format)
 
 	def test_pull_vars(self):
 		"""
@@ -54,10 +57,11 @@ class TestCollector(TestCase):
 			'{$ project_name, False, $PROJECT_NAME }'
 		]
 
-		self.assertEqual(nginx_vars, nginx_vars_constant)
-		self.assertEqual(gunicorn_vars, gunicorn_vars_constant)
+		self.assertListEqual(nginx_vars, nginx_vars_constant)
+		self.assertListEqual(gunicorn_vars, gunicorn_vars_constant)
+		self.assertRaises(TypeError, self.no_format.pull_vars)  # Test file with no formatting
 
-	def test_outputs(self):
+	def test_outputs(self) -> None:
 
 		nginx_inputs_constants = {
 			'project_name': 'django_deploy',
@@ -78,19 +82,35 @@ class TestCollector(TestCase):
 
 		g = self.gunicorn_collector.outputs(gunicorn_inputs_constants)
 		n = self.nginx_collector.outputs(nginx_inputs_constants)
+		exists = self.nginx_collector.outputs(nginx_inputs_constants, './file_templates/no-format.txt')
+		#  Test when file exists
 
 		self.assertEqual(g, True)
 		self.assertEqual(n, True)
+		self.assertFalse(exists)
 
-		g_file = './new_template-gunicorn.service'
-		n_file = './new_template-sites-available'
+	# def test_create_template(self):
+	# 	to_format = './file_templates/no-format.txt'
+	# 	collect_to_format = Collector(to_format)
+	# 	template = collect_to_format.format_temp()
+	# 	template_const = './file_templates/template-sites-available'
+	#
+	# 	with open(template, 'rb') as temp, open(template_const, 'rb') as const:
+	# 		temp = temp.read()
+	# 		const = const.read()
+	#
+	# 	self.assertEqual(temp, const)
+
+	def tearDown(self) -> None:
+
+		g_file = './new-template-gunicorn.service'
+		n_file = './new-template-sites-available'
 
 		while os.path.isfile(g_file) or os.path.isfile(n_file):
 			os.remove(g_file)
+			print(f'{g_file} removed')
 			os.remove(n_file)
-
-		self.assertFalse(os.path.isfile(g_file), True)
-		self.assertFalse(os.path.isfile(n_file), True)
+			print(f'{n_file} removed')
 
 
 if __name__ == '__main__':
