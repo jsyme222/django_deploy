@@ -89,18 +89,6 @@ class TestCollector(TestCase):
 		self.assertEqual(n, True)
 		self.assertFalse(exists)
 
-	# def test_create_template(self):
-	# 	to_format = './file_templates/no-format.txt'
-	# 	collect_to_format = Collector(to_format)
-	# 	template = collect_to_format.format_temp()
-	# 	template_const = './file_templates/template-sites-available'
-	#
-	# 	with open(template, 'rb') as temp, open(template_const, 'rb') as const:
-	# 		temp = temp.read()
-	# 		const = const.read()
-	#
-	# 	self.assertEqual(temp, const)
-
 	def tearDown(self) -> None:
 
 		g_file = './new-template-gunicorn.service'
