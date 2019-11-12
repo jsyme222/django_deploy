@@ -3,6 +3,10 @@ import os
 import re
 
 
+FILE_DIR = os.path.dirname(os.path.realpath(__file__))  # Base of deploy app
+ROOT_DIR = os.getcwd()
+
+
 def center(text, width=80, delim="-", end="\n"):
     """
 	Text align and decoration for terminal display.

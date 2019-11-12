@@ -1,7 +1,7 @@
 #!/usr/bin python3.7
 import os
 from unittest import TestCase, main
-from components import Collector
+import classes
 
 
 class TestCollector(TestCase):
@@ -19,17 +19,17 @@ class TestCollector(TestCase):
 		stored within the tests directory.
 		"""
 
-		gunicorn_file = './file_templates/template-gunicorn.service'  # Gunicorn test file
-		self.gunicorn_collector = Collector(gunicorn_file)
+		gunicorn_file = './test_file_templates/template-gunicorn.service'  # Gunicorn test file
+		self.gunicorn_collector = classes.Collector(gunicorn_file)
 
-		nginx_file = './file_templates/template-sites-available'  # Nginx test files
-		self.nginx_collector = Collector(nginx_file)
+		nginx_file = './test_file_templates/template-sites-available'  # Nginx test files
+		self.nginx_collector = classes.Collector(nginx_file)
 
 		false_file = '/file/that/does/not/exist'
-		self.false_collector = Collector(false_file)
+		self.false_collector = classes.Collector(false_file)
 
-		no_format = './file_templates/no-format.txt'
-		self.no_format = Collector(no_format)
+		no_format = './test_file_templates/no-format.txt'
+		self.no_format = classes.Collector(no_format)
 
 	def test_pull_vars(self):
 		"""
@@ -63,6 +63,8 @@ class TestCollector(TestCase):
 
 	def test_outputs(self) -> None:
 
+		user = os.getlogin()
+
 		nginx_inputs_constants = {
 			'project_name': 'django_deploy',
 			'port': '80',
@@ -72,17 +74,18 @@ class TestCollector(TestCase):
 		}
 
 		gunicorn_inputs_constants = {
-			'user': 'jsyme',
+			'user': user,
 			'group': 'www-data',
-			'root_dir': '/home/jsyme/projects/pycharm/django_deploy',
-			'path_to_env': '/home/jsyme/projects/pycharm/.env/',
-			'sock_path': '/home/jsyme/projects/pycharm/django_deploy/django_deploy.sock',
+			'root_dir': classes.FILE_DIR,
+			'path_to_env': classes.default_env_dir(classes.FILE_DIR),
+			'sock_path': f'/home/{user}/projects/pycharm/django_deploy/django_deploy.sock',
 			'project_name': 'django_deploy'
 		}
+		print(gunicorn_inputs_constants)
 
 		g = self.gunicorn_collector.outputs(gunicorn_inputs_constants)
 		n = self.nginx_collector.outputs(nginx_inputs_constants)
-		exists = self.nginx_collector.outputs(nginx_inputs_constants, './file_templates/no-format.txt')
+		exists = self.nginx_collector.outputs(nginx_inputs_constants, './test_file_templates/no-format.txt')
 		#  Test when file exists
 
 		self.assertEqual(g, True)
@@ -99,6 +102,11 @@ class TestCollector(TestCase):
 			print(f'{g_file} removed')
 			os.remove(n_file)
 			print(f'{n_file} removed')
+
+
+class TestDeploy(TestCase):
+
+	pass
 
 
 if __name__ == '__main__':
