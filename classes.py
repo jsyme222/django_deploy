@@ -2,7 +2,6 @@
 import os
 import re
 
-
 FILE_DIR = os.path.dirname(os.path.realpath(__file__))  # Base of deploy app
 ROOT_DIR = os.getcwd()
 
@@ -23,17 +22,17 @@ def center(text, width=80, delim="-", end="\n"):
         print(line.center(width, delim) + end)
 
 
-def check_django_dir(directory):
+def check_django_dir(root):
     """
 	Checks for a 'manage.py' file to verify base directory
 	of a django project
 
-	:param directory: str()
+	:param root: str()
 	:return django_dir: bool()
 	"""
 
     django_dir = True
-    if 'manage.py' not in os.listdir(directory):
+    if 'manage.py' not in os.listdir(root):
         django_dir = False
 
     return django_dir
@@ -53,6 +52,20 @@ def default_env_dir(root):
     env += '/.env/'
 
     return env
+
+
+def default_sock_dir(root):
+    """
+    Builds a default directory the Gunicorn sock
+    file based off ff the ROOT_DIR and using the
+    :param root:
+    :return:
+    """
+
+    project_name = root.split('/')[-1]
+    root = root + '/' + project_name + '.sock'
+
+    return root
 
 
 class Collector:  # TODO Get actual file path and file name
@@ -113,10 +126,10 @@ class Collector:  # TODO Get actual file path and file name
 
         SYSTEM_CALLS = {
             '$USER': os.getlogin(),
-            '$PWD': os.getcwd(),
-            '$ENV_DIR': default_env_dir(os.getcwd()),
-            '$SOCK_DIR': os.getcwd() + '/' + os.getcwd().split('/')[-1] + '.sock',
-            '$PROJECT_NAME': os.getcwd().split('/')[-1],
+            '$PWD': ROOT_DIR,
+            '$ENV_DIR': default_env_dir(ROOT_DIR),
+            '$SOCK_DIR': default_sock_dir(ROOT_DIR),
+            '$PROJECT_NAME': ROOT_DIR.split('/')[-1],
         }
 
         def read_from_file(added_functions={}):  # TODO docstring

@@ -1,55 +1,55 @@
 #!/user/bin python3.7
+import os
+
 import classes
 
 
-def run_gunicorn():  # TODO Docstring
+def setup_gunicorn():  # TODO Docstring
 
 	classes.center('Beginning Gunicorn Configuration', delim=' ')
-	file = './file_templates/gunicorn/gunicorn.service'
-	#  default_location = '/etc/systemd/system/gunicorn.service'
-	default_location = './NEW-GUNICORN.SERVICE'
+	file = os.path.join(
+		classes.FILE_DIR,
+		'file_templates/gunicorn/gunicorn.service'
+	)
+	default_location = '/etc/systemd/system/gunicorn.service'
 
 	g = classes.Collector(file)
 	data = g.inputs(output_file=False)
-	if not data:
-		return False
-	else:
-		environment = data['path_to_env']
-		prompt = f'location\n[{default_location}]'
-		output_to = input(prompt)
 
-		if output_to == '':
-			output_to = default_location
-
-		output = g.outputs(data, output_to)
-		if not output:
-			return False
-		else:
-			return environment
+	return g, data, default_location
 
 
-def run_nginx(): # TODO Docstring
+def setup_nginx():  # TODO Docstring
 
 	classes.center('Beginning Nginx Configuration', delim=' ')
-	file = './file_templates/nginx/sites-available/*template*'
-	#  default_location = '/etc/nginx/sites-available/{}'
-	default_location = './NEW-{}'
+	file = os.path.join(
+		classes.FILE_DIR,
+		'file_templates/nginx/sites-available/sites-available'
+	)
+	default_location = '/etc/nginx/sites-available/{}'
 
 	n = classes.Collector(file)
 	data = n.inputs(output_file=False)
 
-	if not data:
-		return False
-	else:
-		default_location = default_location.format(data['project_name'])
-		prompt = f'location\n[{default_location}]'
-		output_to = input(prompt)
+	return n, data, default_location.format(data['project_name'])
 
-		if output_to == '':
-			output_to = default_location
 
-		output = n.outputs(data, output_to)
-		return output
+def run(*args):
+	for arg in args:
+		obj, data, location = arg
+
+		if not data:
+			raise Exception('Error getting file inputs')
+		else:
+			default_location = location
+			prompt = f'location\n[{default_location}]'
+			output_to = input(prompt)
+
+			if output_to == '':
+				output_to = default_location
+
+			output = obj.outputs(data, output_to)
+			return output
 
 
 def main():
@@ -64,8 +64,7 @@ def main():
 		if choice not in 'Yy':
 			exit()
 
-	run_gunicorn()
-	run_nginx()
+	run(setup_gunicorn(), setup_nginx())
 
 
 if __name__ == '__main__':

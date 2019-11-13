@@ -1,6 +1,7 @@
 #!/usr/bin python3.7
 import os
 from unittest import TestCase, main
+
 import classes
 
 
@@ -19,16 +20,27 @@ class TestCollector(TestCase):
 		stored within the tests directory.
 		"""
 
-		gunicorn_file = './test_file_templates/template-gunicorn.service'  # Gunicorn test file
+		test_dir = os.path.join(classes.FILE_DIR, 'test_file_templates/')
+
+		gunicorn_file = os.path.join(
+			test_dir,
+			'template-gunicorn.service'  # Gunicorn test file
+		)
 		self.gunicorn_collector = classes.Collector(gunicorn_file)
 
-		nginx_file = './test_file_templates/template-sites-available'  # Nginx test files
+		nginx_file = os.path.join(
+			classes.FILE_DIR,
+			'test_file_templates/sites-available'  # Nginx test files
+		)
 		self.nginx_collector = classes.Collector(nginx_file)
 
 		false_file = '/file/that/does/not/exist'
 		self.false_collector = classes.Collector(false_file)
 
-		no_format = './test_file_templates/no-format.txt'
+		no_format = os.path.join(
+			classes.FILE_DIR,
+			'test_file_templates/no-format.txt',
+		)
 		self.no_format = classes.Collector(no_format)
 
 	def test_pull_vars(self):
@@ -66,10 +78,10 @@ class TestCollector(TestCase):
 		user = os.getlogin()
 
 		nginx_inputs_constants = {
-			'project_name': 'django_deploy',
+			'project_name': 'Project_Name',
 			'port': '80',
 			'domains': 'domain.com www.domain.com',
-			'root_dir': '/home/jsyme/projects/pycharm/django_deploy',
+			'root_dir': classes.FILE_DIR,
 			'sock_path': '/home/jsyme/projects/pycharm/django_deploy/django_deploy.sock'
 		}
 
@@ -85,7 +97,13 @@ class TestCollector(TestCase):
 
 		g = self.gunicorn_collector.outputs(gunicorn_inputs_constants)
 		n = self.nginx_collector.outputs(nginx_inputs_constants)
-		exists = self.nginx_collector.outputs(nginx_inputs_constants, './test_file_templates/no-format.txt')
+		exists = self.nginx_collector.outputs(
+			nginx_inputs_constants,
+			os.path.join(
+				classes.FILE_DIR,
+				'test_file_templates/no-format.txt'
+			)
+		)
 		#  Test when file exists
 
 		self.assertEqual(g, True)
@@ -94,8 +112,8 @@ class TestCollector(TestCase):
 
 	def tearDown(self) -> None:
 
-		g_file = './new-template-gunicorn.service'
-		n_file = './new-template-sites-available'
+		g_file = os.path.join(classes.FILE_DIR, 'new-template-gunicorn.service')
+		n_file = os.path.join(classes.FILE_DIR, 'new-sites-available')
 
 		while os.path.isfile(g_file) or os.path.isfile(n_file):
 			os.remove(g_file)
