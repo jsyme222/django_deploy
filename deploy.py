@@ -1,11 +1,13 @@
 #!/user/bin python3.7
 import os
+import subprocess
 
 import classes
 
 
 def setup_gunicorn():  # TODO Docstring
 
+	name = 'gunicorn'
 	classes.center('Beginning Gunicorn Configuration', delim=' ')
 	file = os.path.join(
 		classes.FILE_DIR,
@@ -16,40 +18,58 @@ def setup_gunicorn():  # TODO Docstring
 	g = classes.Collector(file)
 	data = g.inputs(output_file=False)
 
-	return g, data, default_location
+	return g, name, data, default_location
 
 
 def setup_nginx():  # TODO Docstring
 
+	name = 'nginx'
 	classes.center('Beginning Nginx Configuration', delim=' ')
 	file = os.path.join(
 		classes.FILE_DIR,
 		'file_templates/nginx/sites-available/sites-available'
 	)
-	default_location = '/etc/nginx/sites-available/{}'
 
 	n = classes.Collector(file)
 	data = n.inputs(output_file=False)
 
-	return n, data, default_location.format(data['project_name'])
+	default_location = f'/etc/nginx/sites-available/{data["project_name"]}'
+	print(default_location)
+	return n, name, data, default_location
 
 
 def run(*args):
+	outputs = []
 	for arg in args:
-		obj, data, location = arg
+		obj, name, data, location = arg
 
 		if not data:
 			raise Exception('Error getting file inputs')
-		else:
-			default_location = location
-			prompt = f'location\n[{default_location}]'
-			output_to = input(prompt)
+		default_location = location
+		prompt = f'location\n[{default_location}]'
+		output_to = input(prompt)
 
-			if output_to == '':
-				output_to = default_location
+		if output_to == '':
+			output_to = default_location
 
-			output = obj.outputs(data, output_to)
-			return output
+		output = obj.outputs(data, output_to)
+
+		if name == 'nginx':
+			project = data['project_name']
+			link = subprocess.run(
+				[
+					'ln',
+					'-s',
+					f'/etc/nginx/sites-available/{project}',
+					'/etc/nginx/sites-enabled'
+				]
+			)
+			if not link:
+				raise Exception('Unable to link sites-available')
+
+		outputs.append(output)
+
+	return outputs
 
 
 def main():
