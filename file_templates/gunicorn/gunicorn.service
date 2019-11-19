@@ -3,18 +3,13 @@ Description=gunicorn daemon
 After=network.target
 
 [Service] 
-User={$ user, False, $USER }
-#  user = (user, Required, default: $USER)
+User={$ user, $USER }
 
-Group={$ group, False, www-data }
-#  group = www-data(default: www-data)
+Group={$ group, www-data }
  
-WorkingDirectory={$ root_dir, False, $PWD }
-#  root_dir = /home/$USER/projects/project_name/app
+WorkingDirectory={$ root_dir, $PWD }
 
-ExecStart={$ path_to_env, False, $ENV_DIR }bin/gunicorn --access-logfile - --workers 3 --bind unix:{$ sock_path, False, $SOCK_DIR } {$ project_name, False, $PROJECT_NAME }.wsgi:application
-#  sock_path = /home/jsyme/projects/project_name/app/app.sock
-#  project_name = app
+ExecStart={$ path_to_env, $ENV_DIR }bin/gunicorn --access-logfile - --workers 3 --bind unix:{$ sock_path, $SOCK_DIR } {$ project_name, $PROJECT_NAME }.wsgi:application
 
 [Install]
 WantedBy=multi-user.target

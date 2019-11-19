@@ -20,17 +20,17 @@ class TestCollector(TestCase):
 		stored within the tests directory.
 		"""
 
-		test_dir = os.path.join(classes.FILE_DIR, 'test_file_templates/')
+		self.test_dir = os.path.join(classes.FILE_DIR, 'test_file_templates')
 
 		gunicorn_file = os.path.join(
-			test_dir,
+			self.test_dir,
 			'template-gunicorn.service'  # Gunicorn test file
 		)
 		self.gunicorn_collector = classes.Collector(gunicorn_file)
 
 		nginx_file = os.path.join(
-			classes.FILE_DIR,
-			'test_file_templates/sites-available'  # Nginx test files
+			self.test_dir,
+			'template-sites-available'  # Nginx test files
 		)
 		self.nginx_collector = classes.Collector(nginx_file)
 
@@ -38,8 +38,8 @@ class TestCollector(TestCase):
 		self.false_collector = classes.Collector(false_file)
 
 		no_format = os.path.join(
-			classes.FILE_DIR,
-			'test_file_templates/no-format.txt',
+			self.test_dir,
+			'no-format.txt',
 		)
 		self.no_format = classes.Collector(no_format)
 
@@ -52,21 +52,21 @@ class TestCollector(TestCase):
 
 		nginx_vars = self.nginx_collector.pull_vars(raw=True)
 		nginx_vars_constant = [
-			'{$ project_name, False, $PROJECT_NAME }',
-			'{$ port, False, 80 }',
-			'{$ domains, True, None }',
-			'{$ root_dir, False, $PWD }',
-			'{$ sock_path, False, $SOCK_DIR }'
+			#'{$ project_name, $PROJECT_NAME }',
+			'{$ port, 80 }',
+			'{$ domains, None, True }',
+			'{$ root_dir, $PWD }',
+			'{$ sock_path, $SOCK_DIR }'
 		]
 
 		gunicorn_vars = self.gunicorn_collector.pull_vars(raw=True)
 		gunicorn_vars_constant = [
-			'{$ user, False, $USER }',
-			'{$ group, False, www-data }',
-			'{$ root_dir, False, $PWD }',
-			'{$ path_to_env, False, $ENV_DIR }',
-			'{$ sock_path, False, $SOCK_DIR }',
-			'{$ project_name, False, $PROJECT_NAME }'
+			'{$ user, $USER }',
+			'{$ group, www-data }',
+			'{$ root_dir, $PWD }',
+			'{$ path_to_env, $ENV_DIR }',
+			'{$ sock_path, $SOCK_DIR }',
+			'{$ project_name, $PROJECT_NAME }'
 		]
 
 		self.assertListEqual(nginx_vars, nginx_vars_constant)
@@ -81,27 +81,28 @@ class TestCollector(TestCase):
 			'project_name': 'Project_Name',
 			'port': '80',
 			'domains': 'domain.com www.domain.com',
-			'root_dir': classes.FILE_DIR,
-			'sock_path': '/home/jsyme/projects/pycharm/django_deploy/django_deploy.sock'
+			'root_dir': self.test_dir,
+			'sock_path': f'/home/jsyme/projects/pycharm/django_deploy/django_deploy.sock'
 		}
 
 		gunicorn_inputs_constants = {
 			'user': user,
 			'group': 'www-data',
-			'root_dir': classes.FILE_DIR,
-			'path_to_env': classes.default_env_dir(classes.FILE_DIR),
-			'sock_path': f'/home/{user}/projects/pycharm/django_deploy/django_deploy.sock',
+			'root_dir': self.test_dir,
+			'path_to_env': classes.default_env_dir(self.test_dir),
+			'sock_path': f'/home/jsyme/projects/pycharm/django_deploy/django_deploy.sock',
 			'project_name': 'django_deploy'
 		}
 		print(gunicorn_inputs_constants)
 
-		g = self.gunicorn_collector.outputs(gunicorn_inputs_constants)
-		n = self.nginx_collector.outputs(nginx_inputs_constants)
+		g = self.gunicorn_collector.outputs(gunicorn_inputs_constants, os.path.join(self.test_dir, 'new-template-gunicorn.service')
+)
+		n = self.nginx_collector.outputs(nginx_inputs_constants, os.path.join(self.test_dir, 'new-sites-available'))
 		exists = self.nginx_collector.outputs(
 			nginx_inputs_constants,
 			os.path.join(
-				classes.FILE_DIR,
-				'test_file_templates/no-format.txt'
+				self.test_dir,
+				'no-format.txt'
 			)
 		)
 		#  Test when file exists
@@ -112,8 +113,8 @@ class TestCollector(TestCase):
 
 	def tearDown(self) -> None:
 
-		g_file = os.path.join(classes.FILE_DIR, 'new-template-gunicorn.service')
-		n_file = os.path.join(classes.FILE_DIR, 'new-sites-available')
+		g_file = os.path.join(self.test_dir, 'new-template-gunicorn.service')
+		n_file = os.path.join(self.test_dir, 'new-sites-available')
 
 		while os.path.isfile(g_file) or os.path.isfile(n_file):
 			os.remove(g_file)

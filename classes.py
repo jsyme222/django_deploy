@@ -140,7 +140,8 @@ class Collector:  # TODO Get actual file path and file name
 
             try:
                 for case in self.pull_vars():
-                    prompt, required, default = case[0], case[1], case[2]
+                    prompt, default = case[0], case[1]
+                    required = True if default is 'None' else False
                     if default.startswith('$'):
                         default = SYSTEM_CALLS[default]
 
@@ -215,4 +216,9 @@ class Collector:  # TODO Get actual file path and file name
         except FileExistsError:
             self.errors['File Error'] = f'File {filename} already exists at {write_to}'
             self.read_err()
-            return False
+        except IsADirectoryError:
+            self.errors['File Error'] = 'Location is directory'
+            self.read_err()
+        prompt = 'location\n[]'
+        write_to = input(prompt)
+        return write_to_file()
