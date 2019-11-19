@@ -7,7 +7,7 @@ import classes
 
 def gunicorn():
 
-	classes.center('Beginning Gunicorn Configuration', delim=' ')
+	classes.center('Gunicorn Configuration', delim=' ')
 	file = os.path.join(
 		classes.FILE_DIR,
 		'file_templates/gunicorn/gunicorn.service'
@@ -22,7 +22,7 @@ def gunicorn():
 
 def nginx():
 
-	classes.center('Beginning Nginx Configuration', delim=' ')
+	classes.center('Nginx Configuration', delim=' ')
 	file = os.path.join(
 		classes.FILE_DIR,
 		'file_templates/nginx/sites-available/sites-available'
@@ -50,7 +50,7 @@ def run(*args):
 		out = obj.outputs(data, output_to)
 		output_list.append(out)
 
-		if args.index(arg) == [-1]:
+		if arg == args[-1]:
 
 			link_sites_available = [
 				'ln',
@@ -58,7 +58,14 @@ def run(*args):
 				f'/etc/nginx/sites-available/{data["project_name"]}',
 				'/etc/nginx/sites-enabled',
 			]
+			nginx_restart = [
+				'sudo',
+				'systemctl',
+				'start',
+				'nginx',
+			]
 			subprocess.run(link_sites_available)
+			subprocess.run(nginx_restart)
 
 	return output_list
 
